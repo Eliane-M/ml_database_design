@@ -18,5 +18,21 @@ def create_student(db: Session, student: schemas.StudentCreate):
     return new_student
 
 # update student
+def update_student(db: Session, student_id: int, student: schemas.StudentCreate):
+    student_to_update = db.query(models.Student).filter(models.Student.id == student_id).first()
+    if not existing_student:
+        return None
+    for key, value in student.dict().items():
+        setattr(student_to_update, key, value)
+    db.commit()
+    return student_to_update
 
+# delete student
+def delete_student(db: Session, student_id: int):
+    student_to_delete = db.query(models.Student).filter(models.Student.id == student_id).first()
+    if not student_to_delete:
+        return None
+    db.delete(student_to_delete)
+    db.commit()
+    return student_to_delete
 
