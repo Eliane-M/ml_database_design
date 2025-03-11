@@ -21,9 +21,9 @@ def get_db():
 # Create student
 @app.post("/students/", response_model=schemas.Student)
 def create_student(student: schemas.StudentCreate, db: Session = Depends(get_db)):
-    db_student = crud.get_student(db, student.Student_ID)
+    db_student = crud.get_student_by_email(db, student.Email)
     if db_student:
-        raise HTTPException(status_code=400, detail="Student ID already exists")
+        raise HTTPException(status_code=400, detail="Student already exists")
     return crud.create_student(db, student)
 
 # Create student with details

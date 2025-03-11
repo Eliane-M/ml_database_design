@@ -10,9 +10,13 @@ def get_students(db: Session):
 def get_student(db: Session, student_id: str):
     return db.query(models.Student).filter(models.Student.Student_ID == student_id).first()
 
+def get_student_by_email(db: Session, email: str):
+    return db.query(models.Student).filter(models.Student.Email == email).first()
+
 # create student
 def create_student(db: Session, student: schemas.StudentCreate):
-    new_student = models.Student(**student.dict())
+    student_id = models.Student.generate_student_id(db)
+    new_student = models.Student(Student_ID=student_id, **student.dict())
     db.add(new_student)
     db.commit()
     db.refresh(new_student)

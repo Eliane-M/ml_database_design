@@ -9,7 +9,7 @@ class StudentBase(BaseModel):
     Age: Optional[int] = None
 
 class StudentCreate(StudentBase):
-    Student_ID: str
+    pass
 
 class Student(StudentBase):
     Student_ID: str

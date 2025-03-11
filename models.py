@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, CheckConstraint
 from sqlalchemy.types import DECIMAL
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session
 
 Base = declarative_base()
 
@@ -12,6 +13,16 @@ class Student(Base):
     Email = Column(String(100))
     Gender = Column(String(1))
     Age = Column(Integer)
+
+    @staticmethod
+    def generate_student_id(db: Session):
+        last_student = db.query(Student).order_by(Student.Student_ID.desc()).first()
+        if last_student:
+            last_id_num = int(last_student.Student_ID[1:])
+            new_id_num = last_id_num + 1
+        else:
+            new_id_num = 1
+        return f"S{new_id_num:04d}"
 
 class AcademicDetails(Base):
     __tablename__ = "Academic_Details"
