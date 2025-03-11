@@ -30,7 +30,7 @@ class AcademicDetailsBase(BaseModel):
     Grade: Optional[str] = None
 
 class AcademicDetailsCreate(AcademicDetailsBase):
-    Student_ID: str
+   pass
 
 class AcademicDetails(AcademicDetailsBase):
     Student_ID: str

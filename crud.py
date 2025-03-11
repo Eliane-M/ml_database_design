@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 import models, schemas
 from fastapi import HTTPException
+from typing import Optional
+from sqlalchemy.sql import text
 
 # get all students
 def get_students(db: Session):
@@ -26,22 +28,26 @@ def create_student_with_details(
     db: Session,
     student: schemas.StudentCreate,
     academic: schemas.AcademicDetailsCreate,
-    study_hours: int,
-    sleep_hours: float,
-    stress_level: int,
-    extracurricular: bool,
-    internet_access: bool,
-    parent_education: str,
-    family_income: str
+    study_hours: Optional[int] = None,
+    sleep_hours: Optional[float] = None,
+    stress_level: Optional[int] = None,
+    extracurricular: Optional[bool] = None,
+    internet_access: Optional[bool] = None,
+    parent_education: Optional[str] = None,
+    family_income: Optional[str] = None,
+    generated_student_id: str = None
 ):
-    db.execute(
+    sql = text(
         "CALL AddNewStudent(:p_Student_ID, :p_First_Name, :p_Last_Name, :p_Email, :p_Gender, :p_Age, "
         ":p_Department, :p_Attendance_Percentage, :p_Midterm_Score, :p_Final_Score, :p_Assignments_Avg, "
         ":p_Quizzes_Avg, :p_Participation_Score, :p_Projects_Score, :p_Total_Score, :p_Grade, "
         ":p_Study_Hours_per_Week, :p_Sleep_Hours_per_Night, :p_Stress_Level, :p_Extracurricular_Activities, "
-        ":p_Internet_Access_at_Home, :p_Parent_Education_Level, :p_Family_Income_Level)",
+        ":p_Internet_Access_at_Home, :p_Parent_Education_Level, :p_Family_Income_Level)"
+    )
+    db.execute(
+        sql,
         {
-            "p_Student_ID": student.Student_ID,
+            "p_Student_ID": generated_student_id,
             "p_First_Name": student.First_Name,
             "p_Last_Name": student.Last_Name,
             "p_Email": student.Email,
@@ -67,7 +73,7 @@ def create_student_with_details(
         }
     )
     db.commit()
-    return get_student(db, student.Student_ID)
+    return get_student(db, generated_student_id)
 
 # update student
 def update_student(db: Session, student_id: str, student_data: dict):

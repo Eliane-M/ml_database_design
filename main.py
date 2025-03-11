@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Base
 import models, schemas, crud
-from typing import Dict
+from typing import Dict, Optional
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,20 +31,23 @@ def create_student(student: schemas.StudentCreate, db: Session = Depends(get_db)
 def create_student_with_details(
     student: schemas.StudentCreate,
     academic: schemas.AcademicDetailsCreate,
-    study_hours: int,
-    sleep_hours: float,
-    stress_level: int,
-    extracurricular: bool,
-    internet_access: bool,
-    parent_education: str,
-    family_income: str,
+    study_hours: Optional[int] = None,
+    sleep_hours: Optional[float] = None,
+    stress_level: Optional[int] = None,
+    extracurricular: Optional[bool] = None,
+    internet_access: Optional[bool] = None,
+    parent_education: Optional[str] = None,
+    family_income: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
-    db_student = crud.get_student(db, student.Student_ID)
-    if db_student:
-        raise HTTPException(status_code=400, detail="Student ID already exists")
+    student_id = models.Student.generate_student_id(db)
+    if student.Email:
+        db_student = crud.get_student_by_email(db, student.Email)
+        if db_student:
+            raise HTTPException(status_code=400, detail="Student already exists")
+    
     return crud.create_student_with_details(
-        db, student, academic, study_hours, sleep_hours, stress_level, extracurricular, internet_access, parent_education, family_income
+        db, student, academic, study_hours, sleep_hours, stress_level, extracurricular, internet_access, parent_education, family_income, generated_student_id=student_id
     )
 
 # Get all students
