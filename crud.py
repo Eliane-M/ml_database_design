@@ -1,12 +1,13 @@
 from sqlalchemy.orm import Session
 import models, schemas
+from fastapi import HTTPException
 
 # get all students
 def get_students(db: Session):
     return db.query(models.Student).all()
 
 # get student by id
-def get_student(db: Session, student_id: int):
+def get_student(db: Session, student_id: str):
     return db.query(models.Student).filter(models.Student.Student_ID == student_id).first()
 
 # create student
@@ -65,22 +66,41 @@ def create_student_with_details(
     return get_student(db, student.Student_ID)
 
 # update student
-def update_student(db: Session, student_id: int, student: schemas.StudentCreate):
+def update_student(db: Session, student_id: str, student_data: dict):
     student_to_update = db.query(models.Student).filter(models.Student.Student_ID == student_id).first()
     if not student_to_update:
         return None
-    for key, value in student.dict(exclude_unset=True).items():
-        setattr(student_to_update, key, value)
+    for key, value in student_data.items():
+        if hasattr(student_to_update, key) and key != "Student_ID":
+            setattr(student_to_update, key, value)
+        else:
+            raise HTTPException(status_code=400, detail=f"Invalid field: {key}")
     db.commit()
     db.refresh(student_to_update)
     return student_to_update
 
 # delete student
-def delete_student(db: Session, student_id: int):
+def delete_student(db: Session, student_id: str):
     student_to_delete = db.query(models.Student).filter(models.Student.Student_ID == student_id).first()
     if not student_to_delete:
-        return None
-    db.delete(student_to_delete)
-    db.commit()
-    return student_to_delete
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    try:
+        print(f"Deleting AcademicDetails for {student_id}")
+        db.query(models.AcademicDetails).filter(models.AcademicDetails.Student_ID == student_id).delete()
+        print(f"Deleting StudyHabits for {student_id}")
+        db.query(models.StudyHabits).filter(models.StudyHabits.Student_ID == student_id).delete()
+        print(f"Deleting Extracurriculars for {student_id}")
+        db.query(models.Extracurriculars).filter(models.Extracurriculars.Student_ID == student_id).delete()
+        print(f"Deleting FamilyBackground for {student_id}")
+        db.query(models.FamilyBackground).filter(models.FamilyBackground.Student_ID == student_id).delete()
+        
+        print(f"Deleting Student {student_id}")
+        db.delete(student_to_delete)
+        db.commit()
+        return {"message": f"Student {student_id} and all related records deleted successfully"}
+    except Exception as e:
+        print(f"Error: str{e}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error deleting student: {str(e)}")
 
