@@ -11,11 +11,6 @@ class StudentBase(BaseModel):
 class StudentCreate(StudentBase):
     pass
 
-class Student(StudentBase):
-    Student_ID: str
-
-    class Config:
-        orm_mode = True
 
 class AcademicDetailsBase(BaseModel):
     Department: Optional[str] = None
@@ -32,8 +27,49 @@ class AcademicDetailsBase(BaseModel):
 class AcademicDetailsCreate(AcademicDetailsBase):
    pass
 
+class StudyHabitsBase(BaseModel):
+    Study_Hours_per_Week: Optional[int] = None
+    Sleep_Hours_per_Night: Optional[float] = None
+    Stress_Level: Optional[int] = None
+
+class ExtracurricularsBase(BaseModel):
+    Extracurricular_Activities: Optional[bool] = None
+
+class FamilyBackgroundBase(BaseModel):
+    Internet_Access_at_Home: Optional[bool] = None
+    Parent_Education_Level: Optional[str] = None
+    Family_Income_Level: Optional[str] = None
+
 class AcademicDetails(AcademicDetailsBase):
     Student_ID: str
+
+    class Config:
+        orm_mode = True
+
+class StudyHabits(StudyHabitsBase):
+    Student_ID: str
+
+    class Config:
+        orm_mode = True
+
+class Extracurriculars(ExtracurricularsBase):
+    Student_ID: str
+
+    class Config:
+        orm_mode = True
+
+class FamilyBackground(FamilyBackgroundBase):
+    Student_ID: str
+
+    class Config:
+        orm_mode = True
+
+class Student(StudentBase):
+    Student_ID: str
+    academic_details: Optional[AcademicDetails] = None
+    study_habits: Optional[StudyHabits] = None
+    extracurriculars: Optional[Extracurriculars] = None
+    family_background: Optional[FamilyBackground] = None
 
     class Config:
         orm_mode = True

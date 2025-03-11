@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, CheckConstraint
 from sqlalchemy.types import DECIMAL
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship
 
 Base = declarative_base()
 
@@ -13,6 +13,11 @@ class Student(Base):
     Email = Column(String(100))
     Gender = Column(String(1))
     Age = Column(Integer)
+
+    academic_details = relationship("AcademicDetails", back_populates="student", uselist=False)
+    study_habits = relationship("StudyHabits", back_populates="student", uselist=False)
+    extracurriculars = relationship("Extracurriculars", back_populates="student", uselist=False)
+    family_background = relationship("FamilyBackground", back_populates="student", uselist=False)
 
     @staticmethod
     def generate_student_id(db: Session):
@@ -38,6 +43,8 @@ class AcademicDetails(Base):
     Total_Score = Column(DECIMAL(5, 2))
     Grade = Column(String(2))
 
+    student = relationship("Student", back_populates="academic_details")
+
 
 class StudyHabits(Base):
     __tablename__ = "Study_Habits"
@@ -47,10 +54,14 @@ class StudyHabits(Base):
     Stress_Level = Column(Integer)
     __table_args__ = (CheckConstraint("Stress_Level BETWEEN 1 AND 10"),)
 
+    student = relationship("Student", back_populates="study_habits")
+
 class Extracurriculars(Base):
     __tablename__ = "Extracurriculars"
     Student_ID = Column(String(10), ForeignKey("Students.Student_ID"), primary_key=True)
     Extracurricular_Activities = Column(Boolean)
+
+    student = relationship("Student", back_populates="extracurriculars")
 
 class FamilyBackground(Base):
     __tablename__ = "Family_Background"
@@ -58,6 +69,8 @@ class FamilyBackground(Base):
     Internet_Access_at_Home = Column(Boolean)
     Parent_Education_Level = Column(String(50))
     Family_Income_Level = Column(String(50))
+
+    student = relationship("Student", back_populates="family_background")
 
 class StudentAuditLog(Base):
     __tablename__ = "Student_Audit_Log"

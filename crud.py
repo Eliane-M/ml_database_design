@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 import models, schemas
 from fastapi import HTTPException
 from typing import Optional
@@ -6,11 +6,21 @@ from sqlalchemy.sql import text
 
 # get all students
 def get_students(db: Session):
-    return db.query(models.Student).all()
+    return db.query(models.Student).options(
+        joinedload(models.Student.academic_details),
+        joinedload(models.Student.study_habits),
+        joinedload(models.Student.extracurriculars),
+        joinedload(models.Student.family_background)
+    ).all()
 
 # get student by id
 def get_student(db: Session, student_id: str):
-    return db.query(models.Student).filter(models.Student.Student_ID == student_id).first()
+    return db.query(models.Student).options(
+        joinedload(models.Student.academic_details),
+        joinedload(models.Student.extracurriculars),
+        joinedload(models.Student.family_background),
+        joinedload(models.Student.study_habits)
+    ).filter(models.Student.Student_ID == student_id).first()
 
 def get_student_by_email(db: Session, email: str):
     return db.query(models.Student).filter(models.Student.Email == email).first()
