@@ -44,25 +44,25 @@ class AcademicDetails(AcademicDetailsBase):
     Student_ID: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class StudyHabits(StudyHabitsBase):
     Student_ID: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Extracurriculars(ExtracurricularsBase):
     Student_ID: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class FamilyBackground(FamilyBackgroundBase):
     Student_ID: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Student(StudentBase):
     Student_ID: str
@@ -72,4 +72,4 @@ class Student(StudentBase):
     family_background: Optional[FamilyBackground] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
