@@ -170,13 +170,3 @@ def delete_student(student_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Student not found")
     return student
 
-
-# Swagger UI metadata
-app = FastAPI(
-    title="Student Management API",
-    description="This API manages students and their details, including academic records, study habits, extracurriculars, and family background.",
-    version="1.0.0",
-    docs_url="/", 
-    redoc_url="/redoc",  
-    openapi_url="/openapi.json",  
-)
