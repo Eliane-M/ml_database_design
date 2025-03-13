@@ -124,3 +124,26 @@ def delete_student(db: Session, student_id: str):
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error deleting student: {str(e)}")
 
+def get_latest_student(db: Session):
+    return db.query(Student).order_by(Student.id.desc()).first()
+
+def predict_total_score(db: Session):
+    latest_entry = get_latest_student(db)
+    if not latest_entry:
+        return {"error": "No data available"}
+
+    # Prepare the features for prediction (excluding total score)
+    features = np.array([
+        latest_entry.Gender, latest_entry.Age, latest_entry.Department,
+        latest_entry.Attendance, latest_entry.Midterm_Score, latest_entry.Final_Score,
+        latest_entry.Assignments_Avg, latest_entry.Quizzes_Avg, latest_entry.Participation_Score,
+        latest_entry.Projects_Score, latest_entry.Study_Hours_per_Week, latest_entry.Extracurricular_Activities,
+        latest_entry.Internet_Access_at_Home, latest_entry.Family_Income_Level,
+        latest_entry.Stress_Level, latest_entry.Sleep_Hours_per_Night
+    ]).reshape(1, -1)
+
+    Model_path = r"C:\Users\Merveille\ml_database_design\model\student_score_model.h5"
+
+    model = load_model(Model_path)
+    prediction = model.predict(features)
+    return {"predicted_total_score": float(prediction[0][0])}

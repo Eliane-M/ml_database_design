@@ -170,3 +170,13 @@ def delete_student(student_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Student not found")
     return student
 
+@app.get('/student/latest')
+def fetch_latest_student(db: Session = Depends(get_db)):
+    student = get_latest_student(db)
+    if student is None:
+        raise HTTPException(status_code=404, detail='No students found')
+    return student
+
+@app.post("/student/predict/")
+def predict_student(data: schemas.StudentFeatures):
+    return predict_total_score(db)
