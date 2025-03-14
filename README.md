@@ -27,41 +27,69 @@ The database consists of the following tables:
      gender
      
   2. Study_habits
+     
      student_id (Primary key, Foreign key)
+     
      study_hours_per_week
+     
      preferred_study_method
+     
      use_of_technology
+     
      group_study_participation
 
   3. Academic_Details
+     
      student_id (Primary key, Foreign key)
+     
      department
+     
      attendance_percentage
+     
      midterm_score
+     
      final_score
+     
      assignment_avg
+     
      quizzes_avg
+     
      participation_score
+     
      projects_score
+     
      total_score
+     
      grade
 
   4. Extracurriculars
+     
      student_id (Primary key, Foreign key)
+     
      extracurricular_activities
 
   5. Family_background
+     
      student_id (Primary key, Foreign key)
+     
      internet_access_at_home
+     
      parent_education_level
+     
      family_income_level
      
   6. Student_Audit_Log
+
      log_id (Primary key, Auto_Increment)
+     
      student_id (Foreign key)
+     
      old_email
+     
      new_email
+     
      change_time
+     
      action
 
 ## Technologies Used
