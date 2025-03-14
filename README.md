@@ -20,23 +20,28 @@ The API is deployed and accessible at [Student Management Apis](https://ml-datab
 The database consists of the following tables:
 
   1. Student
-     student_id (Primary key)
-     first_name
-     last_name
-     email
-     gender
+  
+     - student_id (Primary key)
+     
+     - first_name
+     
+     - last_name
+     
+     - email
+     
+     - gender
      
   2. Study_habits
      
-     student_id (Primary key, Foreign key)
+     - student_id (Primary key, Foreign key)
      
-     study_hours_per_week
+     - study_hours_per_week
      
-     preferred_study_method
+     - preferred_study_method
      
-     use_of_technology
+     - use_of_technology
      
-     group_study_participation
+     - group_study_participation
 
   3. Academic_Details
      
