@@ -45,57 +45,57 @@ The database consists of the following tables:
 
   3. Academic_Details
      
-     student_id (Primary key, Foreign key)
+     - student_id (Primary key, Foreign key)
      
-     department
+     - department
      
-     attendance_percentage
+     - attendance_percentage
      
-     midterm_score
+     - midterm_score
      
-     final_score
+     - final_score
      
-     assignment_avg
+     - assignment_avg
      
-     quizzes_avg
+     - quizzes_avg
      
-     participation_score
+     - participation_score
      
-     projects_score
+     - projects_score
      
-     total_score
+     - total_score
      
-     grade
+     - grade
 
   4. Extracurriculars
      
-     student_id (Primary key, Foreign key)
+     - student_id (Primary key, Foreign key)
      
-     extracurricular_activities
+     - extracurricular_activities
 
   5. Family_background
      
-     student_id (Primary key, Foreign key)
+     - student_id (Primary key, Foreign key)
      
-     internet_access_at_home
+     - internet_access_at_home
      
-     parent_education_level
+     - parent_education_level
      
-     family_income_level
+     - family_income_level
      
   6. Student_Audit_Log
 
-     log_id (Primary key, Auto_Increment)
+     - log_id (Primary key, Auto_Increment)
      
-     student_id (Foreign key)
+     - student_id (Foreign key)
      
-     old_email
+     - old_email
      
-     new_email
+     - new_email
      
-     change_time
+     - change_time
      
-     action
+     - action
 
 ## Technologies Used
 
