@@ -3,6 +3,11 @@ import models, schemas
 from fastapi import HTTPException
 from typing import Optional
 from sqlalchemy.sql import text
+import numpy as np
+# from tensorflow import keras
+# from tensorflow.keras.models import load_model
+
+
 
 # get all students
 def get_students(db: Session):
@@ -13,7 +18,7 @@ def get_students(db: Session):
         joinedload(models.Student.family_background)
     ).all()
 
-# get student by id
+# get student by Student_ID
 def get_student(db: Session, student_id: str):
     return db.query(models.Student).options(
         joinedload(models.Student.academic_details),
@@ -124,3 +129,10 @@ def delete_student(db: Session, student_id: str):
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error deleting student: {str(e)}")
 
+def get_latest_student(db: Session):
+    return db.query(models.Student).options(
+        joinedload(models.Student.academic_details),
+        joinedload(models.Student.study_habits),
+        joinedload(models.Student.extracurriculars),
+        joinedload(models.Student.family_background)
+    ).order_by(models.Student.Student_ID.desc()).first()

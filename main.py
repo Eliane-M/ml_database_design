@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Base
-import models, schemas, crud
+import models, schemas, crud, predict
 from typing import Dict, Optional
+from predict import predict_total_score
 
 Base.metadata.create_all(bind=engine)
 
@@ -170,3 +171,15 @@ def delete_student(student_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Student not found")
     return student
 
+@app.get('/students/latest/')
+def fetch_latest_student(db: Session = Depends(get_db)):
+    student = crud.get_latest_student(db)
+    print(student)
+    if student is None:
+        raise HTTPException(status_code=404, detail='No students found')
+    return student
+
+
+@app.get("/students/predict/")
+def predict_student(db: Session = Depends(get_db)):
+    return predict.predict_total_score(db, "student_model.keras")

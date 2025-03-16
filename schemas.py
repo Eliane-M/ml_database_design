@@ -73,3 +73,22 @@ class Student(StudentBase):
 
     class Config:
         orm_mode = True
+
+class StudentFeatures(BaseModel):
+    Gender: int
+    Age: int
+    Department: int
+    Attendance: float
+    Midterm_Score: float
+    Final_Score: float
+    Assignments_Avg: float
+    Quizzes_Avg: float
+    Participation_Score: float
+    Projects_Score: float
+    Grade: int
+    Study_Hours_per_Week: float
+    Extracurricular_Activities: int
+    Internet_Access_at_Home: int
+    Family_Income_Level: int
+    Stress_Level: int
+    Sleep_Hours_per_Night: float
